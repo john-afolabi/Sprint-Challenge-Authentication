@@ -10,6 +10,13 @@ function addUser(user) {
     });
 }
 
+function findUser(filter) {
+  return db("users")
+    .where(filter)
+    .first();
+}
+
 module.exports = {
-  addUser
+  addUser,
+  findUser
 };
