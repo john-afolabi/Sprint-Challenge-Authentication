@@ -23,3 +23,31 @@ describe("Register endpoint", () => {
     });
   });
 });
+
+describe("Login endpoint", () => {
+  describe("POST /login", () => {
+    test("Did it return a 200 OK status", async () => {
+      request(server)
+        .post("/api/auth/register")
+        .send({ username: "admin", password: "1234" })
+        .then(res => {
+          return request(server)
+            .post("/api/auth/login")
+            .send({ username: "admin", password: "1234" })
+            .expect(200);
+        });
+    });
+
+    test("Did it return the logged in user token and welcome message", () => {
+      request(server)
+        .post("/api/auth/register")
+        .send({ username: "admin", password: "1234" })
+        .then(async res => {
+          const loggedIn = await request(server)
+            .post("/api/auth/login")
+            .send({ username: "admin", password: "1234" });
+          expect(JSON.parse(loggedIn.text)).toHaveProperty("message", "token");
+        });
+    });
+  });
+});
